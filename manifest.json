@@ -19,7 +19,11 @@
       "en": "Mail statistics"
     },
     "icon": "bar-chart",
-    "file": "page/index.html"
+    "file": "page/index.html",
+    "description": {
+      "de": "Wie viele Mails deine Projekte verschicken – je Tag, je Projekt, je Absender und Empfänger. Daten aus dem Mail-Fänger.",
+      "en": "How many e-mails your projects send – per day, per project, per sender and recipient. Data from the mail catcher."
+    }
   },
   "widget": {
     "title": {
@@ -63,7 +67,7 @@
       ]
     }
   ],
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "Hostwerk",
   "homepage": "https://github.com/Passimoritz/hostwerk-ext-mail-stats",
   "license": "MIT",
