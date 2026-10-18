@@ -1,0 +1,72 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Passimoritz/hostwerk-public/main/sdk/manifest.schema.json",
+  "id": "mail-stats",
+  "color": "#f59e0b",
+  "name": {
+    "de": "Mail-Statistik",
+    "en": "Mail statistics"
+  },
+  "description": {
+    "de": "Wie viele Mails deine Projekte verschicken – je Tag, je Projekt, je Absender und Empfänger. Daten aus dem Mail-Fänger.",
+    "en": "How many e-mails your projects send – per day, per project, per sender and recipient. Data from the mail catcher."
+  },
+  "permissions": [
+    "read:mail"
+  ],
+  "page": {
+    "title": {
+      "de": "Mail-Statistik",
+      "en": "Mail statistics"
+    },
+    "icon": "bar-chart",
+    "file": "page/index.html"
+  },
+  "widget": {
+    "title": {
+      "de": "Mails",
+      "en": "Mails"
+    },
+    "file": "widget/index.html",
+    "size": "third"
+  },
+  "settings": [
+    {
+      "key": "days",
+      "type": "select",
+      "label": {
+        "de": "Zeitraum",
+        "en": "Range"
+      },
+      "default": "14",
+      "options": [
+        {
+          "value": "7",
+          "label": {
+            "de": "7 Tage",
+            "en": "7 days"
+          }
+        },
+        {
+          "value": "14",
+          "label": {
+            "de": "14 Tage",
+            "en": "14 days"
+          }
+        },
+        {
+          "value": "30",
+          "label": {
+            "de": "30 Tage",
+            "en": "30 days"
+          }
+        }
+      ]
+    }
+  ],
+  "version": "1.0.0",
+  "author": "Hostwerk",
+  "homepage": "https://github.com/Passimoritz/hostwerk-ext-mail-stats",
+  "license": "MIT",
+  "icon": "icon.svg",
+  "hostwerk": ">=2.9.0"
+}

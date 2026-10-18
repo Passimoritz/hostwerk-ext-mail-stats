@@ -1,0 +1,17 @@
+{
+  "title": "Mail statistics",
+  "loading": "Loading …",
+  "sub": "What your projects send – from the mail catcher",
+  "total": "Total",
+  "today": "Today",
+  "unread": "Unread",
+  "avgSize": "Avg. size",
+  "perDay": "Per day",
+  "byProject": "Per project (sender domain)",
+  "bySender": "Senders",
+  "byRecipient": "Recipients",
+  "empty": "No mail yet",
+  "emptyHint": "As soon as a project sends an e-mail, it lands in the mail catcher and shows up here.",
+  "widgetToday": "Mails today",
+  "widgetSub": "{n} total · {unread} unread"
+}

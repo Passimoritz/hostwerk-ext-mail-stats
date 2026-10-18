@@ -1,0 +1,21 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="/ext-sdk.js"></script>
+  <style>
+    .big { font-size: 26px; font-weight: 700; }
+    .mini { display: flex; align-items: flex-end; gap: 4px; height: 36px; margin-top: 8px; }
+    .mini .bar { flex: 1; border-radius: 3px; background: var(--hw-accent); }
+  </style>
+</head>
+<body>
+  <div class="hw-muted hw-small" data-i18n="widgetToday"></div>
+  <div class="big" id="n">–</div>
+  <div class="hw-tiny hw-muted" id="sub"></div>
+  <div class="mini" id="mini"></div>
+  <script src="../page/lib.js"></script>
+  <script src="widget.js"></script>
+</body>
+</html>

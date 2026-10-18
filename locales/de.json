@@ -1,0 +1,17 @@
+{
+  "title": "Mail-Statistik",
+  "loading": "Lade …",
+  "sub": "Was deine Projekte verschicken – aus dem Mail-Fänger",
+  "total": "Gesamt",
+  "today": "Heute",
+  "unread": "Ungelesen",
+  "avgSize": "Ø Größe",
+  "perDay": "Je Tag",
+  "byProject": "Je Projekt (Absender-Domain)",
+  "bySender": "Absender",
+  "byRecipient": "Empfänger",
+  "empty": "Noch keine Mails",
+  "emptyHint": "Sobald ein Projekt eine Mail verschickt, landet sie im Mail-Fänger und erscheint hier.",
+  "widgetToday": "Mails heute",
+  "widgetSub": "{n} insgesamt · {unread} ungelesen"
+}
