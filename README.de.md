@@ -1,3 +1,5 @@
+![Mail-Statistik](banner.svg)
+
 # Mail-Statistik
 
 Wie viele Mails deine Projekte verschicken – je Tag, je Projekt, je Absender und Empfänger. Daten aus dem Mail-Fänger.

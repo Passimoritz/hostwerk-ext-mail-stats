@@ -1,3 +1,5 @@
+![Mail statistics](banner.svg)
+
 # Mail statistics
 
 How many e-mails your projects send – per day, per project, per sender and recipient. Data from the mail catcher.
