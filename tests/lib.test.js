@@ -31,3 +31,19 @@ test('Balkenhöhen relativ zum Maximum, auch ohne Mails', () => {
   assert.deepStrictEqual(S.bars([{ n: 2 }, { n: 1 }, { n: 0 }]).map((x) => x.pct), [100, 50, 0]);
   assert.deepStrictEqual(S.bars([{ n: 0 }]).map((x) => x.pct), [0]);
 });
+
+test('Filter nach Projekt, Absender, Empfänger', () => {
+  const list = [m('a@shop.test', 'k@x', 0), m('b@shop.test', 'L@x', 0), m('c@blog.test', 'k@x', 0)];
+  assert.strictEqual(S.filter(list, { kind: 'project', value: 'shop.test' }).length, 2);
+  assert.strictEqual(S.filter(list, { kind: 'sender', value: 'c@blog.test' }).length, 1);
+  assert.strictEqual(S.filter(list, { kind: 'recipient', value: 'l@x' }).length, 1);
+  assert.strictEqual(S.filter(list, null).length, 3);
+});
+
+test('Spitzen: viel mehr als sonst, aber erst ab 20 Mails', () => {
+  const days = (ns) => ns.map((n) => ({ n }));
+  assert.deepStrictEqual(S.spike(days([2, 3, 1, 2, 40])), { today: 40, usual: 2 });
+  assert.strictEqual(S.spike(days([2, 3, 1, 2, 12])), null);
+  assert.strictEqual(S.spike(days([30, 30, 30, 30, 60])), null);
+  assert.deepStrictEqual(S.spike(days([0, 0, 0, 25])), { today: 25, usual: 0 });
+});

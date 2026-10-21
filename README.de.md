@@ -10,12 +10,18 @@ Eine offizielle Erweiterung für [Hostwerk](https://github.com/Passimoritz/hostw
 
 - Mails je Tag als Balken (7, 14 oder 30 Tage)
 - Häufigste Projekte (Absender-Domain), Absender und Empfänger
-- Kennzahlen: heute, ungelesen, Durchschnittsgröße
+- Kennzahlen: heute, ungelesen, mit Anhang, Durchschnittsgröße
+- Klick auf Projekt, Absender, Empfänger oder Tag filtert die ganze Seite (zweiter Klick hebt den Filter auf)
+- Warnt, wenn viel mehr Mails als sonst rausgehen – z. B. wenn ein Projekt in einer Schleife verschickt
+- Zusätzlich Reiter „Statistik“ in Hostwerks E-Mail-Bereich; die Seite steht in der Leiste bei *E-Mail*
 - Kachel für die Übersicht mit der Zahl von heute
+- Balken per Tastatur bedienbar und für Bildschirmleser benannt; Datum und Zahlen in der Sprache von Hostwerk
+- Ladefehler zeigen eine Meldung mit *Erneut versuchen*; bei verstecktem Reiter wird nicht abgefragt
+- Andere Erweiterungen dürfen Reiter ergänzen (`allowExtensions`)
 
 ## Installieren
 
-In Hostwerk: **Apps → Erweiterungen → Marktplatz** → „Mail-Statistik“ → Installieren. Updates kommen von selbst.
+In Hostwerk: **Erweiterungen → Entdecken** → „Mail-Statistik“ → Installieren. Updates kommen von selbst.
 
 ## Rechte
 

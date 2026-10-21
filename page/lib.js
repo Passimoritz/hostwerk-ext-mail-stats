@@ -39,5 +39,20 @@
   }
   /** Höhe der Balken (0–100) relativ zum größten Tag. */
   function bars(days) { const max = Math.max(1, ...days.map((d) => d.n)); return days.map((d) => ({ ...d, pct: Math.round((d.n / max) * 100) })); }
-  return { dayKey, address, domain, perDay, top, summary, bars };
+  /** Filter der Seite: nach Projekt (Absender-Domain), Absender, Empfänger oder Tag (JJJJ-MM-TT). */
+  const KEYS = { project: (m) => domain(m.from), sender: (m) => address(m.from), recipient: (m) => address(m.to), day: (m) => dayKey(m.date) };
+  function filter(messages, f) { if (!f || !KEYS[f.kind]) return messages || []; return (messages || []).filter((m) => KEYS[f.kind](m) === f.value); }
+  /**
+   * Spitze erkennen (z. B. eine Mail-Endlosschleife): heute mindestens 20 Mails und mehr als das Fünffache des
+   * Medians der Vortage (mindestens 1). Liefert { today, usual } oder null.
+   */
+  function spike(days, { min = 20, factor = 5 } = {}) {
+    if (!days || days.length < 3) return null;
+    const today = days[days.length - 1].n;
+    const prev = days.slice(0, -1).map((d) => d.n).sort((a, b) => a - b);
+    const mid = prev.length >> 1;
+    const usual = prev.length % 2 ? prev[mid] : (prev[mid - 1] + prev[mid]) / 2;
+    return today >= min && today > factor * Math.max(1, usual) ? { today, usual } : null;
+  }
+  return { dayKey, address, domain, perDay, top, summary, bars, filter, spike, KEYS };
 }));

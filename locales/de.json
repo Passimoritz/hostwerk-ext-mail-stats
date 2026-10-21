@@ -13,5 +13,21 @@
   "empty": "Noch keine Mails",
   "emptyHint": "Sobald ein Projekt eine Mail verschickt, landet sie im Mail-Fänger und erscheint hier.",
   "widgetToday": "Mails heute",
-  "widgetSub": "{n} insgesamt · {unread} ungelesen"
+  "widgetSub": "{n} insgesamt · {unread} ungelesen",
+  "errorTitle": "Mails ließen sich nicht laden",
+  "errorShort": "Laden hat nicht geklappt.",
+  "retry": "Erneut versuchen",
+  "withAttachment": "Mit Anhang",
+  "spikeTitle": "Ungewöhnlich viele Mails heute",
+  "spikeText": "Heute schon {n} Mails, sonst etwa {usual} am Tag – vielleicht verschickt ein Projekt in einer Schleife.",
+  "spikeShort": "Viel mehr als sonst",
+  "openCatcher": "Mail-Fänger öffnen",
+  "clearFilter": "Filter aufheben",
+  "filterBy": "Nur {what} zeigen",
+  "dayLabel": "{day}: {n} Mails",
+  "weekLabel": "Letzte 7 Tage: {list}",
+  "filter.project": "Projekt",
+  "filter.sender": "Absender",
+  "filter.recipient": "Empfänger",
+  "filter.day": "Tag"
 }

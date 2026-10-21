@@ -13,5 +13,21 @@
   "empty": "No mail yet",
   "emptyHint": "As soon as a project sends an e-mail, it lands in the mail catcher and shows up here.",
   "widgetToday": "Mails today",
-  "widgetSub": "{n} total · {unread} unread"
+  "widgetSub": "{n} total · {unread} unread",
+  "errorTitle": "Couldn't load the mails",
+  "errorShort": "Loading failed.",
+  "retry": "Try again",
+  "withAttachment": "With attachment",
+  "spikeTitle": "Unusually many mails today",
+  "spikeText": "{n} mails today already, usually about {usual} a day – maybe a project is sending in a loop.",
+  "spikeShort": "Far more than usual",
+  "openCatcher": "Open mail catcher",
+  "clearFilter": "Clear filter",
+  "filterBy": "Show only {what}",
+  "dayLabel": "{day}: {n} mails",
+  "weekLabel": "Last 7 days: {list}",
+  "filter.project": "Project",
+  "filter.sender": "Sender",
+  "filter.recipient": "Recipient",
+  "filter.day": "Day"
 }

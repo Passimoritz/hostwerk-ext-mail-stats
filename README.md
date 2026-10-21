@@ -10,12 +10,18 @@ An official [Hostwerk](https://github.com/Passimoritz/hostwerk-public) extension
 
 - Mails per day as a bar chart (7, 14 or 30 days)
 - Top projects (sender domain), senders and recipients
-- Totals: today, unread, average size
+- Totals: today, unread, with attachment, average size
+- Click a project, sender, recipient or day to filter the whole page (click again to clear)
+- Warns when far more mails go out than usual – e.g. a project sending in a loop
+- Also a “Statistics” tab in Hostwerk’s mail area; the page sits next to *Mail* in the sidebar
 - Dashboard tile with today’s count
+- Bars usable with the keyboard and named for screen readers; dates and numbers in Hostwerk’s language
+- Loading errors show a message with *Try again*; nothing is fetched while the page is hidden
+- Other extensions may add tabs (`allowExtensions`)
 
 ## Install
 
-In Hostwerk: **Apps → Extensions → Marketplace** → “Mail statistics” → Install. Updates arrive automatically.
+In Hostwerk: **Extensions → Discover** → “Mail statistics” → Install. Updates arrive automatically.
 
 ## Permissions
 
