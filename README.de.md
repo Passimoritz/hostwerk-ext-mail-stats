@@ -8,6 +8,7 @@ Eine offizielle Erweiterung für [Hostwerk](https://github.com/Passimoritz/hostw
 
 ## Funktionen
 
+- **Wo:** E-Mail → Statistik – seit 1.3.1 ohne eigenen Seitenleisten-Eintrag; die ganze Seite bleibt unter Erweiterungen → Öffnen
 - Mails je Tag als Balken (7, 14 oder 30 Tage)
 - Häufigste Projekte (Absender-Domain), Absender und Empfänger
 - Kennzahlen: heute, ungelesen, mit Anhang, Durchschnittsgröße

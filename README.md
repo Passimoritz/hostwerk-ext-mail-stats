@@ -8,6 +8,7 @@ An official [Hostwerk](https://github.com/Passimoritz/hostwerk-public) extension
 
 ## Features
 
+- **Where:** E-mail → Statistics – no own sidebar entry since 1.3.1; the full page stays under Extensions → Open
 - Mails per day as a bar chart (7, 14 or 30 days)
 - Top projects (sender domain), senders and recipients
 - Totals: today, unread, with attachment, average size
