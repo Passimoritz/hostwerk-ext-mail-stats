@@ -1,3 +1,7 @@
+## 1.3.2
+
+- Progress reads “Lädt …” in German like everywhere in Hostwerk. / Fortschritt heißt auf Deutsch „Lädt …“ wie überall in Hostwerk.
+
 ## 1.3.1
 
 - Lives where it belongs: E-mail → Statistics – no own sidebar entry any more (Hostwerk 3.0+); the full page stays under Extensions → Open and can be pinned in the sidebar settings. / Steckt jetzt dort, wo sie hingehört: E-Mail → Statistik – kein eigener Seitenleisten-Eintrag mehr (Hostwerk 3.0+); die ganze Seite bleibt unter Erweiterungen → Öffnen und lässt sich in den Seitenleisten-Einstellungen anheften.
