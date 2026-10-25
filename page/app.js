@@ -7,6 +7,12 @@ let filter = null; // { kind: 'project' | 'sender' | 'recipient' | 'day', value,
 let warned = ''; // Spitze schon gemeldet (je Tag einmal pro Sitzung)
 const locale = () => (Hostwerk.lang === 'de' ? 'de-DE' : 'en-US');
 const num = (n) => Hostwerk.fmt.number(n);
+// Bewegung wie in Hostwerk (SDK 3.6): Zahlen zählen zum neuen Wert, der leere Zustand kommt von Hostwerk.
+// Ältere Hostwerk-Versionen kennen countUp/ui.empty nicht – dann steht der Wert einfach da.
+const shown = {};
+const counter = (key, n) => { const from = Hostwerk.ui.countUp ? (shown[key] || 0) : n; return html`<div class="v" data-count="${key}" data-hw-count="${from}">${num(from)}</div>`; };
+function countAll(values) { for (const [k, n] of Object.entries(values)) { const el = document.querySelector(`[data-count="${k}"]`); if (el && Hostwerk.ui.countUp) Hostwerk.ui.countUp(el, n); shown[k] = n; } }
+const MAIL = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>'; // Lucide „mail“ (ISC)
 
 function showError(msg) {
   Hostwerk.render('#alert', html`<div class="callout err" role="alert"><div class="grow"><b class="callout-title">${t('errorTitle')}</b><span>${msg}</span></div><button class="btn sm" data-retry>${t('retry')}</button></div>`);
@@ -28,13 +34,15 @@ async function load() {
   Hostwerk.render('#filter', filter ? html`<div class="row ms-filter"><span class="chip">${t('filter.' + filter.kind)}: <b>${filter.label || filter.value}</b></span><button class="btn ghost sm" data-clear>${t('clearFilter')}</button><button class="btn ghost sm" data-go="/mail">${t('openCatcher')}</button></div>` : '');
   const sum = S.summary(list);
   Hostwerk.render('#stats', html`
-    <div class="card card-pad stat"><div class="k">${t('total')}</div><div class="v">${num(sum.total)}</div></div>
-    <div class="card card-pad stat"><div class="k">${t('today')}</div><div class="v">${num(sum.today)}</div></div>
-    <div class="card card-pad stat"><div class="k">${t('unread')}</div><div class="v">${num(sum.unread)}</div></div>
-    <div class="card card-pad stat"><div class="k">${t('withAttachment')}</div><div class="v">${num(sum.attachments)}</div></div>
+    <div class="card card-pad stat"><div class="k">${t('total')}</div>${counter('total', sum.total)}</div>
+    <div class="card card-pad stat"><div class="k">${t('today')}</div>${counter('today', sum.today)}</div>
+    <div class="card card-pad stat"><div class="k">${t('unread')}</div>${counter('unread', sum.unread)}</div>
+    <div class="card card-pad stat"><div class="k">${t('withAttachment')}</div>${counter('attachments', sum.attachments)}</div>
     <div class="card card-pad stat"><div class="k">${t('avgSize')}</div><div class="v">${Hostwerk.fmt.bytes(sum.avgSize)}</div></div>`);
+  countAll({ total: sum.total, today: sum.today, unread: sum.unread, attachments: sum.attachments });
   if (!all.length) {
-    Hostwerk.render('#chart', html`<div class="empty-state"><h3>${t('empty')}</h3><p>${t('emptyHint')}</p><div class="empty-action"><button class="btn sm" data-go="/mail">${t('openCatcher')}</button></div></div>`);
+    const open = html`<button class="btn sm" data-go="/mail">${t('openCatcher')}</button>`;
+    Hostwerk.render('#chart', Hostwerk.ui.empty ? Hostwerk.ui.empty({ title: t('empty'), text: t('emptyHint'), icon: Hostwerk.raw(MAIL), action: open }) : html`<div class="empty-state"><h3>${t('empty')}</h3><p>${t('emptyHint')}</p><div class="empty-action">${open}</div></div>`);
     Hostwerk.render('#tops', '');
     return;
   }

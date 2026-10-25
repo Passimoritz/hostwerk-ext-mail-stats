@@ -1,3 +1,7 @@
+## 1.4.0
+
+- Hostwerk’s animations (SDK 3.6): the figures count to their new value and without e-mails the page shows Hostwerk’s empty state. Everything stops with “Reduce animations”. / Hostwerks Animationen (SDK 3.6): Die Zahlen zählen zum neuen Wert, ohne Mails zeigt die Seite Hostwerks leeren Zustand. Alles ruht bei „Animationen reduzieren“.
+
 ## 1.3.3
 
 - New animated icon and banner in the common Hostwerk style (isometric block). / Neues animiertes Symbol und Banner im gemeinsamen Hostwerk-Stil (isometrischer Block).
