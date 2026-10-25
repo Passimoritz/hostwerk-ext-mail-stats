@@ -4,9 +4,11 @@
 
 Wie viele Mails deine Projekte verschicken – je Tag, je Projekt, je Absender und Empfänger. Daten aus dem Mail-Fänger.
 
-Eine offizielle Erweiterung für [Hostwerk](https://github.com/Passimoritz/hostwerk-public).
+[English](README.md) · Offizielle [Hostwerk](https://github.com/Passimoritz/hostwerk-public)-Erweiterung (läuft abgeschottet, ab Hostwerk 2.9)
 
-## Funktionen
+![Bildschirmfoto](docs/screenshot.de.png)
+
+## Was sie kann
 
 - **Wo:** E-Mail → Statistik – seit 1.3.1 ohne eigenen Seitenleisten-Eintrag; die ganze Seite bleibt unter Erweiterungen → Öffnen
 - Mails je Tag als Balken (7, 14 oder 30 Tage)
@@ -30,7 +32,7 @@ In Hostwerk: **Erweiterungen → Entdecken** → „Mail-Statistik“ → Instal
 
 Seiten laufen abgeschottet (eigener Ursprung, keine fremden Skripte); alles, was etwas ändert, fragt vorher nach.
 
-## Entwicklung
+## Entwickeln
 
 ```bash
 node --test tests/*.test.js            # Tests der Logik
@@ -40,3 +42,7 @@ node pfad/zu/hostwerk-public/sdk/check.js . --strict   # dieselbe Prüfung wie d
 Die Logik steckt in `page/lib.js` (ohne DOM, getestet), die Seite in `page/app.js`. Ein Tag `vX.Y.Z` passend zu `manifest.json` veröffentlicht ein Release; der Hostwerk-Katalog übernimmt es.
 
 English: [README.md](README.md) · Lizenz: MIT
+
+## Lizenz
+
+MIT

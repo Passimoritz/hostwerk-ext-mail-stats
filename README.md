@@ -4,9 +4,11 @@
 
 How many e-mails your projects send – per day, per project, per sender and recipient. Data from the mail catcher.
 
-An official [Hostwerk](https://github.com/Passimoritz/hostwerk-public) extension.
+[Deutsch](README.de.md) · An official [Hostwerk](https://github.com/Passimoritz/hostwerk-public) extension (runs sandboxed, Hostwerk 2.9 or newer)
 
-## Features
+![Screenshot](docs/screenshot.png)
+
+## What it does
 
 - **Where:** E-mail → Statistics – no own sidebar entry since 1.3.1; the full page stays under Extensions → Open
 - Mails per day as a bar chart (7, 14 or 30 days)
@@ -30,7 +32,7 @@ In Hostwerk: **Extensions → Discover** → “Mail statistics” → Install. 
 
 Pages run isolated (own origin, no external scripts); anything that changes something asks you first.
 
-## Development
+## Develop
 
 ```bash
 node --test tests/*.test.js            # logic tests
@@ -40,3 +42,7 @@ node path/to/hostwerk-public/sdk/check.js . --strict   # same check as the catal
 The logic lives in `page/lib.js` (no DOM, tested), the page in `page/app.js`. A tag `vX.Y.Z` matching `manifest.json` publishes a release; the Hostwerk catalog picks it up.
 
 Deutsch: [README.de.md](README.de.md) · License: MIT
+
+## License
+
+MIT
