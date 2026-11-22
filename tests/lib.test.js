@@ -47,3 +47,25 @@ test('Spitzen: viel mehr als sonst, aber erst ab 20 Mails', () => {
   assert.strictEqual(S.spike(days([30, 30, 30, 30, 60])), null);
   assert.deepStrictEqual(S.spike(days([0, 0, 0, 25])), { today: 25, usual: 0 });
 });
+
+test('Adressen: <…> nur mit @, sonst erste Adresse im Text', () => {
+  assert.strictEqual(S.address('"<b>fett</b>" <X@xss.test>'), 'x@xss.test');
+  assert.strictEqual(S.address('alert@xss.test /script <script>'), 'alert@xss.test');
+  assert.strictEqual(S.address('Ümlaut Ärger <ümlaut@äöü.test>'), 'ümlaut@äöü.test');
+  assert.deepStrictEqual(S.addresses('Kunde A <a@x.test>, b@x.test, "Größe, Jörg" <joerg@x.test>, A@x.test'), ['a@x.test', 'b@x.test', 'joerg@x.test']);
+});
+
+test('mehrere Empfänger zählen einzeln (Umschlag zuerst, sonst „An“)', () => {
+  const list = [m('a@x', 'a@y.test, b@y.test', 0), m('a@x', 'Kunde <a@y.test>', 0, { rcpt: ['A@y.test', 'c@y.test'] }), m('a@x', '', 0)];
+  assert.deepStrictEqual(S.top(list, S.KEYS.recipient), [{ key: 'a@y.test', n: 2 }, { key: '?', n: 1 }, { key: 'b@y.test', n: 1 }, { key: 'c@y.test', n: 1 }]);
+  assert.strictEqual(S.filter(list, { kind: 'recipient', value: 'b@y.test' }).length, 1);
+  assert.strictEqual(S.filter(list, { kind: 'recipient', value: 'a@y.test' }).length, 2);
+  assert.strictEqual(S.filter(list, { kind: 'sender', value: 'a@x' }).length, 3);
+});
+
+test('open the mail catcher with the filter as search, a day without', () => {
+  assert.strictEqual(S.catcherPath({ kind: 'sender', value: 'shop@müller.de' }), '/mail?q=shop%40m%C3%BCller.de');
+  assert.strictEqual(S.catcherPath({ kind: 'project', value: 'example.com' }), '/mail?q=example.com');
+  assert.strictEqual(S.catcherPath({ kind: 'day', value: '2026-11-22' }), '/mail');
+  assert.strictEqual(S.catcherPath(null), '/mail');
+});

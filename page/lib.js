@@ -6,8 +6,20 @@
   const DAY = 86400000;
   const pad = (n) => String(n).padStart(2, '0');
   function dayKey(ts) { const d = new Date(ts); return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`; }
-  /** Adresse ohne Anzeigenamen: "Shop <shop@x.test>" → shop@x.test */
-  function address(s) { const m = String(s || '').match(/<([^>]+)>/); return (m ? m[1] : String(s || '')).trim().toLowerCase(); }
+  const EMAIL = /[^\s<>,;"']+@[^\s<>,;"']+/g;
+  /** Adresse ohne Anzeigenamen: "Shop <shop@x.test>" → shop@x.test (nur <…> mit @ zählt, nicht "<b>Name</b>"). */
+  function address(s) {
+    const str = String(s || '');
+    const m = str.match(/<([^<>\s]*@[^<>\s]*)>/) || str.match(new RegExp(EMAIL.source));
+    return (m ? m[1] || m[0] : str).trim().toLowerCase();
+  }
+  /** Alle Adressen einer Kopfzeile ("A <a@x>, b@y") – Anzeigenamen dürfen Kommas enthalten. */
+  function addresses(s) { return [...new Set((String(s || '').match(EMAIL) || []).map((a) => a.toLowerCase()))]; }
+  /** Empfänger einer Mail: Umschlag-Empfänger (rcpt, auch Bcc), sonst alle Adressen aus „An“; mindestens "?". */
+  function recipients(m) {
+    const list = Array.isArray(m.rcpt) && m.rcpt.length ? [...new Set(m.rcpt.map((a) => address(a)).filter(Boolean))] : addresses(m.to);
+    return list.length ? list : [address(m.to) || '?'];
+  }
   /** Domain einer Adresse – steht meist für das Projekt, das die Mail verschickt hat. */
   function domain(s) { const a = address(s); const i = a.lastIndexOf('@'); return i > 0 ? a.slice(i + 1) : a || '?'; }
   /** Mails je Tag der letzten N Tage (ältester zuerst), auch Tage ohne Mail. */
@@ -19,10 +31,10 @@
     for (const m of messages || []) { const d = map.get(dayKey(m.date)); if (d) d.n++; }
     return out;
   }
-  /** Häufigste Werte (Absender, Empfänger, Domain). */
+  /** Häufigste Werte (Absender, Empfänger, Domain). key(m) darf mehrere Werte liefern (Array, z. B. Empfänger). */
   function top(messages, key, n = 5) {
     const c = new Map();
-    for (const m of messages || []) { const k = key(m); c.set(k, (c.get(k) || 0) + 1); }
+    for (const m of messages || []) for (const k of [].concat(key(m))) c.set(k, (c.get(k) || 0) + 1);
     return [...c.entries()].map(([k, v]) => ({ key: k, n: v })).sort((a, b) => b.n - a.n || a.key.localeCompare(b.key)).slice(0, n);
   }
   /** Kennzahlen: gesamt, heute, ungelesen, mit Anhang, Ø-Größe. */
@@ -40,8 +52,8 @@
   /** Höhe der Balken (0–100) relativ zum größten Tag. */
   function bars(days) { const max = Math.max(1, ...days.map((d) => d.n)); return days.map((d) => ({ ...d, pct: Math.round((d.n / max) * 100) })); }
   /** Filter der Seite: nach Projekt (Absender-Domain), Absender, Empfänger oder Tag (JJJJ-MM-TT). */
-  const KEYS = { project: (m) => domain(m.from), sender: (m) => address(m.from), recipient: (m) => address(m.to), day: (m) => dayKey(m.date) };
-  function filter(messages, f) { if (!f || !KEYS[f.kind]) return messages || []; return (messages || []).filter((m) => KEYS[f.kind](m) === f.value); }
+  const KEYS = { project: (m) => domain(m.from), sender: (m) => address(m.from) || '?', recipient: recipients, day: (m) => dayKey(m.date) };
+  function filter(messages, f) { if (!f || !KEYS[f.kind]) return messages || []; return (messages || []).filter((m) => [].concat(KEYS[f.kind](m)).includes(f.value)); }
   /**
    * Spitze erkennen (z. B. eine Mail-Endlosschleife): heute mindestens 20 Mails und mehr als das Fünffache des
    * Medians der Vortage (mindestens 1). Liefert { today, usual } oder null.
@@ -54,5 +66,7 @@
     const usual = prev.length % 2 ? prev[mid] : (prev[mid - 1] + prev[mid]) / 2;
     return today >= min && today > factor * Math.max(1, usual) ? { today, usual } : null;
   }
-  return { dayKey, address, domain, perDay, top, summary, bars, filter, spike, KEYS };
+  /** „Mail-Fänger öffnen“ mit dem Filter als Suche (#/mail?q=…) – ein Tag lässt sich dort nicht suchen, dann ohne. */
+  function catcherPath(f) { return f && f.value && f.kind !== 'day' ? `/mail?q=${encodeURIComponent(f.value)}` : '/mail'; }
+  return { dayKey, address, addresses, recipients, domain, perDay, top, summary, bars, filter, spike, catcherPath, KEYS };
 }));

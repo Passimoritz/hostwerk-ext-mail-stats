@@ -16,10 +16,12 @@
   "widgetSub": "{n} insgesamt · {unread} ungelesen",
   "errorTitle": "Mails ließen sich nicht laden",
   "errorShort": "Laden hat nicht geklappt.",
+  "errorNetwork": "Hostwerk ist gerade nicht erreichbar – gleich noch einmal versuchen.",
   "retry": "Erneut versuchen",
   "withAttachment": "Mit Anhang",
   "spikeTitle": "Ungewöhnlich viele Mails heute",
   "spikeText": "Heute schon {n} Mails, sonst etwa {usual} am Tag – vielleicht verschickt ein Projekt in einer Schleife.",
+  "spikeTextNone": "Heute schon {n} Mails, sonst kaum welche – vielleicht verschickt ein Projekt in einer Schleife.",
   "spikeShort": "Viel mehr als sonst",
   "openCatcher": "Mail-Fänger öffnen",
   "clearFilter": "Filter aufheben",
@@ -29,5 +31,7 @@
   "filter.project": "Projekt",
   "filter.sender": "Absender",
   "filter.recipient": "Empfänger",
-  "filter.day": "Tag"
+  "filter.day": "Tag",
+  "range": "Zeitraum",
+  "days": "{n} Tage"
 }

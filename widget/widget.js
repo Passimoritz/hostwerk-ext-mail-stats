@@ -6,8 +6,10 @@ let lastLoad = 0;
 async function load() {
   lastLoad = Date.now();
   let list;
-  try { list = await Hostwerk.get('/mail/messages'); } catch {
-    Hostwerk.render('#app', html`<div class="stack" role="alert"><span class="small c-err">${t('errorShort')}</span><div><button class="btn xs" data-retry>${t('retry')}</button></div></div>`);
+  try { list = await Hostwerk.get('/mail/messages'); } catch (e) {
+    // Mit Grund (z. B. „Mail-Fänger nicht erreichbar“) – die rohe Browser-Meldung „Failed to fetch“ ersetzt ein eigener Text
+    const why = /failed to fetch|networkerror|load failed/i.test((e && e.message) || '') ? t('errorNetwork') : (e && e.message) || '';
+    Hostwerk.render('#app', html`<div class="stack" role="alert"><span class="small c-err">${t('errorShort')}</span>${why ? html`<span class="tiny muted ms-why">${why}</span>` : ''}<div><button class="btn xs" data-retry>${t('retry')}</button></div></div>`);
     return;
   }
   const sum = S.summary(list);

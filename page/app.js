@@ -3,8 +3,12 @@ const { html, t } = Hostwerk;
 const S = MailStats;
 const REFRESH = 30000;
 let lastLoad = 0;
+let seq = 0; // nur die jüngste Abfrage zeichnet (schnelle Filter-Klicks, Takt und Einstellungen überholen sich sonst)
 let filter = null; // { kind: 'project' | 'sender' | 'recipient' | 'day', value, label }
-let warned = ''; // Spitze schon gemeldet (je Tag einmal pro Sitzung)
+let warned = null; // Spitze schon gemeldet (je Tag einmal pro Sitzung); null = erstes Laden – da steht der Hinweis ohnehin sichtbar oben
+// Zeitraum direkt über dem Diagramm: gilt für diese Ansicht, bis sie neu lädt (dauerhaft: Einstellungen der Erweiterung)
+const RANGES = [7, 14, 30];
+let range = null;
 const locale = () => (Hostwerk.lang === 'de' ? 'de-DE' : 'en-US');
 const num = (n) => Hostwerk.fmt.number(n);
 // Bewegung wie in Hostwerk (SDK 3.6): Zahlen zählen zum neuen Wert, der leere Zustand kommt von Hostwerk.
@@ -19,19 +23,37 @@ function showError(msg) {
   for (const id of ['#stats', '#chart', '#tops', '#filter']) Hostwerk.render(id, '');
 }
 
+// Tastatur: Neuzeichnen ersetzt die Knöpfe – danach den Fokus auf denselben Knopf zurücksetzen (sonst landet er am Seitenanfang)
+function keepFocus() {
+  const a = document.activeElement;
+  if (!a || a === document.body) return () => {};
+  const { kind, value } = a.dataset;
+  return () => {
+    if (document.activeElement !== document.body && document.contains(document.activeElement)) return;
+    const el = [...document.querySelectorAll('[data-kind]')].find((e) => e.dataset.kind === kind && e.dataset.value === value) || document.querySelector('[data-clear]') || document.querySelector('.ms-col');
+    if (el) el.focus({ preventScroll: true });
+  };
+}
+
 async function load() {
   lastLoad = Date.now();
-  const settings = await Hostwerk.settings.get();
-  const days = Number(settings.days) || 14;
-  let all;
-  try { all = await Hostwerk.get('/mail/messages'); } catch (e) { showError(e.message); return; }
+  const my = ++seq;
+  let all, days;
+  try {
+    const settings = await Hostwerk.settings.get();
+    days = range || Number(settings && settings.days) || 14;
+    all = await Hostwerk.get('/mail/messages');
+  } catch (e) { if (my === seq) showError(/failed to fetch|networkerror|load failed/i.test(e.message) ? t('errorNetwork') : e.message); return; } // rohe Browser-Meldung („Failed to fetch“) nicht zeigen
+  if (my !== seq) return;
+  const refocus = keepFocus();
   // Spitze immer über alle Mails – ein Filter soll keine Warnung verstecken
   const peak = S.spike(S.perDay(all, 14));
   const todayKey = S.dayKey(Date.now());
-  Hostwerk.render('#alert', peak ? html`<div class="callout warn" role="status"><div class="grow"><b class="callout-title">${t('spikeTitle')}</b><span>${t('spikeText', { n: num(peak.today), usual: num(Math.round(peak.usual)) })}</span></div><button class="btn sm" data-go="/mail">${t('openCatcher')}</button></div>` : '');
-  if (peak && warned !== todayKey) { warned = todayKey; Hostwerk.toast(t('spikeTitle'), { kind: 'warning' }); }
+  Hostwerk.render('#alert', peak ? html`<div class="callout warn" role="status"><div class="grow"><b class="callout-title">${t('spikeTitle')}</b><span>${Math.round(peak.usual) ? t('spikeText', { n: num(peak.today), usual: num(Math.round(peak.usual)) }) : t('spikeTextNone', { n: num(peak.today) })}</span></div><button class="btn sm" data-go="/mail">${t('openCatcher')}</button></div>` : '');
+  if (peak && warned !== todayKey) { if (warned !== null) Hostwerk.toast(t('spikeTitle'), { kind: 'warning' }); warned = todayKey; } else if (warned === null) warned = '';
   const list = S.filter(all, filter);
-  Hostwerk.render('#filter', filter ? html`<div class="row ms-filter"><span class="chip">${t('filter.' + filter.kind)}: <b>${filter.label || filter.value}</b></span><button class="btn ghost sm" data-clear>${t('clearFilter')}</button><button class="btn ghost sm" data-go="/mail">${t('openCatcher')}</button></div>` : '');
+  Hostwerk.render('#filter', filter ? html`<div class="row ms-filter"><span class="chip">${t('filter.' + filter.kind)}: <b>${filter.label || filter.value}</b></span><button class="btn ghost sm" data-clear>${t('clearFilter')}</button><button class="btn ghost sm" data-go="${S.catcherPath(filter)}">${t('openCatcher')}</button></div>` : '');
+  Hostwerk.render('#range', all.length ? html`<div class="seg" role="radiogroup" aria-label="${t('range')}">${RANGES.map((n) => html`<button type="button" role="radio" class="${n === days ? 'active' : ''}" aria-checked="${n === days ? 'true' : 'false'}" data-range="${n}">${t('days', { n })}</button>`)}</div>` : '');
   const sum = S.summary(list);
   Hostwerk.render('#stats', html`
     <div class="card card-pad stat"><div class="k">${t('total')}</div>${counter('total', sum.total)}</div>
@@ -44,6 +66,7 @@ async function load() {
     const open = html`<button class="btn sm" data-go="/mail">${t('openCatcher')}</button>`;
     Hostwerk.render('#chart', Hostwerk.ui.empty ? Hostwerk.ui.empty({ title: t('empty'), text: t('emptyHint'), icon: Hostwerk.raw(MAIL), action: open }) : html`<div class="empty-state"><h3>${t('empty')}</h3><p>${t('emptyHint')}</p><div class="empty-action">${open}</div></div>`);
     Hostwerk.render('#tops', '');
+    refocus();
     return;
   }
   const b = S.bars(S.perDay(list, days));
@@ -59,12 +82,15 @@ async function load() {
     return html`<button class="ms-line ${on ? 'on' : ''}" data-kind="${kind}" data-value="${r.key}" aria-pressed="${on ? 'true' : 'false'}" title="${t('filterBy', { what: r.key })}"><span class="ellipsis grow">${r.key}</span><b>${num(r.n)}</b></button>`;
   }) : html`<div class="muted small">–</div>`}</div>`;
   Hostwerk.render('#tops', html`${box(t('byProject'), 'project', S.top(list, S.KEYS.project))}${box(t('bySender'), 'sender', S.top(list, S.KEYS.sender))}${box(t('byRecipient'), 'recipient', S.top(list, S.KEYS.recipient))}`);
+  refocus();
 }
 
 document.addEventListener('click', (e) => {
   const go = e.target.closest('[data-go]');
   if (go) { Hostwerk.navigate(go.dataset.go); return; }
   if (e.target.closest('[data-retry]')) { load(); return; }
+  const r = e.target.closest('[data-range]');
+  if (r) { range = Number(r.dataset.range); load(); return; }
   if (e.target.closest('[data-clear]')) { filter = null; load(); return; }
   const pick = e.target.closest('[data-kind]');
   if (pick) {
@@ -75,4 +101,5 @@ document.addEventListener('click', (e) => {
 });
 // Versteckter Reiter: nicht abfragen; beim Zurückkommen sofort nachholen
 document.addEventListener('visibilitychange', () => { if (!document.hidden && Date.now() - lastLoad >= REFRESH) load(); });
-Hostwerk.ready().then(() => { load(); setInterval(() => { if (!document.hidden) load(); }, REFRESH); Hostwerk.on('settings', load); Hostwerk.on('lang', load); });
+// Auf der eigenen Seite zeigt Hostwerks Kopf die Beschreibung schon – die Unterzeile nur im Reiter des Mail-Bereichs
+Hostwerk.ready().then(() => { if (Hostwerk.embed === 'page') document.getElementById('sub').hidden = true; load(); setInterval(() => { if (!document.hidden) load(); }, REFRESH); Hostwerk.on('settings', () => { range = null; load(); }); Hostwerk.on('lang', load); });

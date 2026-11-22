@@ -7,11 +7,11 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <p class="muted" data-i18n="sub"></p>
+  <p class="muted" id="sub" data-i18n="sub"></p>
   <div id="alert"></div>
   <div id="filter"></div>
   <div class="ms-stats" id="stats"><div class="hw-skeleton ms-skel"></div></div>
-  <div class="card card-pad"><h3 class="card-title" data-i18n="perDay"></h3><div id="chart"></div></div>
+  <div class="card card-pad"><div class="row ms-day-head"><h3 class="card-title grow" data-i18n="perDay"></h3><div id="range"></div></div><div id="chart"></div></div>
   <div class="ms-tops" id="tops"></div>
   <script src="lib.js"></script>
   <script src="app.js"></script>

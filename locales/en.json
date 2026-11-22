@@ -16,10 +16,12 @@
   "widgetSub": "{n} total · {unread} unread",
   "errorTitle": "Couldn't load the mails",
   "errorShort": "Loading failed.",
+  "errorNetwork": "Hostwerk can't be reached right now – try again in a moment.",
   "retry": "Try again",
   "withAttachment": "With attachment",
   "spikeTitle": "Unusually many mails today",
   "spikeText": "{n} mails today already, usually about {usual} a day – maybe a project is sending in a loop.",
+  "spikeTextNone": "{n} mails today already, usually hardly any – maybe a project is sending in a loop.",
   "spikeShort": "Far more than usual",
   "openCatcher": "Open mail catcher",
   "clearFilter": "Clear filter",
@@ -29,5 +31,7 @@
   "filter.project": "Project",
   "filter.sender": "Sender",
   "filter.recipient": "Recipient",
-  "filter.day": "Day"
+  "filter.day": "Day",
+  "range": "Range",
+  "days": "{n} days"
 }
