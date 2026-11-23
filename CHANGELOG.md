@@ -1,3 +1,9 @@
+## 1.5.0
+
+- Choose 7, 14 or 30 days right above the chart; “Open mail catcher” opens it already searched for the filtered sender, recipient or project. / Zeitraum 7, 14 oder 30 Tage direkt über dem Diagramm wählen; „Mail-Fänger öffnen“ öffnet ihn gleich mit der Suche nach dem gefilterten Absender, Empfänger oder Projekt.
+- Mails to several recipients count for each of them (also Bcc), and display names no longer get in the way of the address. / Mails an mehrere Empfänger zählen für jeden von ihnen (auch Bcc), Anzeigenamen stören die Adresse nicht mehr.
+- Fixed: keyboard focus stays on the filter you picked, the highest day keeps its number, no warning toast right on opening, a clear message instead of “Failed to fetch”, no overflow on narrow windows. / Behoben: Der Tastaturfokus bleibt auf dem gewählten Filter, der höchste Tag behält seine Zahl, kein Warn-Hinweis gleich beim Öffnen, eine verständliche Meldung statt „Failed to fetch“, kein Überlauf in schmalen Fenstern.
+
 ## 1.4.0
 
 - Hostwerk’s animations (SDK 3.6): the figures count to their new value and without e-mails the page shows Hostwerk’s empty state. Everything stops with “Reduce animations”. / Hostwerks Animationen (SDK 3.6): Die Zahlen zählen zum neuen Wert, ohne Mails zeigt die Seite Hostwerks leeren Zustand. Alles ruht bei „Animationen reduzieren“.
